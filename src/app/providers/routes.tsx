@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { LoginPage } from "pages/login";
 import { AuthGuard } from "features/auth";
 import { RegisterPage } from "pages/register";
+import { TasksPage } from "pages/tasks";
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -13,7 +14,7 @@ export const AppRoutes: React.FC = () => {
         path="/tasks"
         element={
           <AuthGuard>
-            <div>Tasks page</div>
+            <TasksPage />
           </AuthGuard>
         }
       />
