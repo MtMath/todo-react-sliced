@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DataTable from "react-data-table-component";
+import DataTable, { TableColumn } from "react-data-table-component";
 import { Button, Badge, Form } from "react-bootstrap";
 import { Task } from "../model/tasks";
 
@@ -32,7 +32,7 @@ export const TasksTable: React.FC<TasksTableProps> = ({
     return matchesText && matchesStatus;
   });
 
-  const columns = [
+  const columns: TableColumn<Task>[] = [
     {
       name: "Title",
       selector: (row: Task) => row.title,
@@ -56,7 +56,7 @@ export const TasksTable: React.FC<TasksTableProps> = ({
     },
     {
       name: "Created At",
-      selector: (row: Task) => row.createdAt,
+      selector: (row: Task) => row.createdAt.toISOString(),
       sortable: true,
       format: (row: Task) => new Date(row.createdAt).toLocaleDateString(),
     },
