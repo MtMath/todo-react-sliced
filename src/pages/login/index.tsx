@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Form, Button, Container, Card, Alert } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LoginCredentials, useAuthContext } from "features/auth";
+import { useAuthContext } from "features/auth";
+import { LoginCredentials } from "entities/auth";
 
 export const LoginPage: React.FC = () => {
   const { login, isAuthenticated } = useAuthContext();

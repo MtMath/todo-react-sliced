@@ -1,10 +1,7 @@
 import React, { createContext, useContext } from "react";
-import {
-  useAuth,
-  User,
-  LoginCredentials,
-  RegisterCredentials,
-} from "../model/auth";
+import { useAuth } from "../model/auth";
+import { LoginCredentials, RegisterCredentials } from "entities/auth";
+import { User } from "entities/user";
 
 interface AuthContextType {
   user: User | null;

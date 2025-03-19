@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Card, Alert } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
-import { useAuthContext, RegisterCredentials } from "features/auth";
+import { useAuthContext } from "features/auth";
 import { motion } from "framer-motion";
+import { RegisterCredentials } from "entities/auth";
 
 export const RegisterPage: React.FC = () => {
   const { register, isAuthenticated } = useAuthContext();
@@ -28,6 +29,7 @@ export const RegisterPage: React.FC = () => {
       name,
       email,
       password,
+      confirmPassword,
     };
 
     try {
