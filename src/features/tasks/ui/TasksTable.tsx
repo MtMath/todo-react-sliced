@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { Button, Badge, Form } from "react-bootstrap";
-import { Task } from "../model/tasks";
+import { Task } from "entities/task";
 
 interface TasksTableProps {
   tasks: Task[];
