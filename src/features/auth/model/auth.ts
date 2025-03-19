@@ -1,19 +1,6 @@
+import { LoginCredentials, RegisterCredentials } from "entities/auth";
+import { User } from "entities/user";
 import { useState, useEffect } from "react";
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-}
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface RegisterCredentials extends LoginCredentials {
-  name: string;
-}
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
