@@ -1,26 +1,7 @@
 import { useState, useEffect } from "react";
+import { Task, CreateTaskDto, UpdateTaskDto } from "entities/task";
 
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  status: "pending" | "completed";
-  createdAt: Date;
-}
-
-export interface CreateTaskDto {
-  title: string;
-  description: string;
-}
-
-export interface UpdateTaskDto {
-  id: string;
-  title?: string;
-  description?: string;
-  status?: "pending" | "completed";
-}
-
-export const useTasks = () => {
+export const useTasks = (taskListId?: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +17,7 @@ export const useTasks = () => {
             "Implementar a aplicação web de gerenciamento de tarefas",
           status: "pending",
           createdAt: new Date(),
+          taskListId: "1",
         },
         {
           id: "2",
@@ -43,10 +25,23 @@ export const useTasks = () => {
           description: "Aprofundar conhecimentos em hooks e TypeScript",
           status: "completed",
           createdAt: new Date(Date.now() - 86400000),
+          taskListId: "1",
+        },
+        {
+          id: "3",
+          title: "Fazer compras",
+          description: "Comprar mantimentos para a semana",
+          status: "pending",
+          createdAt: new Date(),
+          taskListId: "2",
         },
       ];
 
-      setTasks(mockTasks);
+      const filteredTasks = taskListId
+        ? mockTasks.filter((task) => task.taskListId === taskListId)
+        : mockTasks;
+
+      setTasks(filteredTasks);
       setError(null);
     } catch (err) {
       setError("Failed to fetch tasks");
@@ -58,7 +53,7 @@ export const useTasks = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [taskListId]);
 
   const createTask = async (taskData: CreateTaskDto): Promise<boolean> => {
     try {
