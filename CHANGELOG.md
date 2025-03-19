@@ -1,3 +1,27 @@
+# [1.1.0](https://github.com/MtMath/todo-react-sliced/compare/v1.0.0...v1.1.0) (2025-03-19)
+
+
+### Bug Fixes
+
+* move auth types to entities ([c23e1dd](https://github.com/MtMath/todo-react-sliced/commit/c23e1ddf90c7b0d795df33b4d86b440fd2b35777))
+* **refactor:** Move task types to entities ([bc37631](https://github.com/MtMath/todo-react-sliced/commit/bc376315acd98998b879a47a56b9883ae6f1ebdc))
+* **refactor:** Re-import auth module ([2b98c6b](https://github.com/MtMath/todo-react-sliced/commit/2b98c6ba0736064a5227440eb557c9c9474a9fe5))
+
+
+### Features
+
+* **Task List:** Add list to task page ([3ddd576](https://github.com/MtMath/todo-react-sliced/commit/3ddd576542474a9a6e4e9373fe2d95341acc5763))
+* **Task List:** Add Task List Entities ([371984a](https://github.com/MtMath/todo-react-sliced/commit/371984ad5f14825a84c596e43c9845880aba67d9))
+* **Task List:** Add task lists exports ([b13c18d](https://github.com/MtMath/todo-react-sliced/commit/b13c18d78f27d4565c4025609cee9fe27764bb6a))
+* **Task List:** Add task lists model ([2c70c29](https://github.com/MtMath/todo-react-sliced/commit/2c70c290399ad73d9135977949f99bf7446e94ef))
+* **Task List:** Add task lists Sidebar component ([b2b51a6](https://github.com/MtMath/todo-react-sliced/commit/b2b51a632d0b16a298844b4ba8f9cbab3bb26f43))
+* **Task List:** Add TaskListForm component ([5ccbfa8](https://github.com/MtMath/todo-react-sliced/commit/5ccbfa868b45d85bf6d63a6fdae682b68307e3da))
+
+
+### Performance Improvements
+
+* Improve task entity data ([2166a02](https://github.com/MtMath/todo-react-sliced/commit/2166a02f7f331a2e930101ced652a6e76b61134a))
+
 # 1.0.0 (2025-03-19)
 
 
