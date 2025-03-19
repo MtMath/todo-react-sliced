@@ -15,4 +15,17 @@ export default defineConfig({
       shared: path.resolve(__dirname, "./src/shared"),
     },
   },
+  build: {
+    outDir: "dist",
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          bootstrap: ["bootstrap", "react-bootstrap"],
+          datatable: ["react-data-table-component", "styled-components"],
+        },
+      },
+    },
+  },
 });
