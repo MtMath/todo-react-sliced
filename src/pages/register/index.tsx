@@ -38,6 +38,10 @@ export const RegisterPage: React.FC = () => {
       return false;
     }
 
+    if (username.length > 15) {
+      setValidationError("O nome de usuário deve ter menos de 16 caracteres");
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       setValidationError("Digite um endereço de e-mail válido");
