@@ -38,7 +38,7 @@ export const useAuth = () => {
       const mockUser: User = {
         id: "1",
         email: credentials.email,
-        name: credentials.name,
+        name: credentials.username,
       };
 
       setUser(mockUser);

@@ -1,103 +1,213 @@
-import React, { useState } from "react";
-import { Form, Button, Container, Card, Alert } from "react-bootstrap";
-import { Link, Navigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Form } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "features/auth";
-import { LoginCredentials } from "entities/auth";
+import { motion } from "framer-motion";
+import {
+  PageContainer,
+  Card,
+  Button,
+  FormField,
+  AnimatedAlert,
+} from "shared/ui";
 
 export const LoginPage: React.FC = () => {
-  const { login, isAuthenticated } = useAuthContext();
+  const { login, isAuthenticated, loading, error, clearError } =
+    useAuthContext();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/tasks");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
+    if (!email || !password) {
+      return;
+    }
 
-    const credentials: LoginCredentials = {
+    clearError();
+
+    const credentials = {
       email,
       password,
     };
 
-    try {
-      const success = await login(credentials);
-
-      if (!success) {
-        setError("Invalid email or password");
-      }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-      console.error(err);
-    } finally {
-      setLoading(false);
+    const success = await login(credentials);
+    if (success) {
+      navigate("/tasks");
     }
   };
 
-  if (isAuthenticated) {
-    return <Navigate to="/tasks" replace />;
-  }
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
-    <Container
-      className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: "100vh" }}
+    <PageContainer
+      fluid
+      className="bg-light min-vh-100 d-flex align-items-center"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-100"
-        style={{ maxWidth: "400px" }}
-      >
-        <Card>
-          <Card.Header as="h5" className="text-center">
-            Login
-          </Card.Header>
-          <Card.Body>
-            {error && <Alert variant="danger">{error}</Alert>}
-
+      <Row className="justify-content-center w-100">
+        <Col xs={12} sm={10} md={8} lg={6} xl={5} xxl={4}>
+          <Card>
             <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                />
-              </Form.Group>
+              <Card.Body className="p-4 p-md-5">
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="text-center mb-4"
+                >
+                  <motion.div variants={itemVariants}>
+                    <div className="mb-4">
+                      <i
+                        className="bi bi-person-check-fill text-primary"
+                        style={{ fontSize: "3rem" }}
+                      ></i>
+                    </div>
+                    <h2 className="mb-1 fw-bold">Bem-vindo(a) de volta!</h2>
+                    <p className="text-muted">
+                      Entre com suas credenciais para continuar
+                    </p>
+                  </motion.div>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  required
-                />
-              </Form.Group>
+                  <AnimatedAlert
+                    show={!!error}
+                    variant="danger"
+                    onClose={clearError}
+                  >
+                    {error}
+                  </AnimatedAlert>
+                </motion.div>
 
-              <Button
-                variant="primary"
-                type="submit"
-                className="w-100 mb-3"
-                disabled={loading}
-              >
-                {loading ? "Logging in..." : "Login"}
-              </Button>
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <motion.div variants={itemVariants}>
+                    <FormField
+                      label="Email"
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Digite seu email"
+                      required
+                      autoFocus
+                      disabled={loading}
+                    />
+                  </motion.div>
+
+                  <motion.div variants={itemVariants}>
+                    <FormField
+                      label={
+                        <div className="d-flex justify-content-between w-100">
+                          <span>Senha</span>
+                          <Link
+                            to="/forgot-password"
+                            className="text-decoration-none small"
+                            tabIndex={-1}
+                          >
+                            Esqueceu a senha?
+                          </Link>
+                        </div>
+                      }
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Digite sua senha"
+                      required
+                      disabled={loading}
+                      rightElement={
+                        <Button
+                          variant="outline-secondary"
+                          onClick={togglePasswordVisibility}
+                          type="button"
+                          animation={false}
+                        >
+                          <i
+                            className={`bi bi-eye${
+                              showPassword ? "-slash" : ""
+                            }`}
+                          ></i>
+                        </Button>
+                      }
+                    />
+                  </motion.div>
+
+                  <motion.div variants={itemVariants}>
+                    <Form.Group className="mb-4">
+                      <Form.Check
+                        type="checkbox"
+                        label="Lembrar de mim"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        disabled={loading}
+                      />
+                    </Form.Group>
+                  </motion.div>
+
+                  <motion.div variants={itemVariants}>
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      className="w-100 mb-3 py-2"
+                      size="lg"
+                      disabled={loading}
+                      loading={loading}
+                      loadingText="Entrando..."
+                    >
+                      Entrar
+                    </Button>
+                  </motion.div>
+                </motion.div>
+
+                <motion.div
+                  variants={itemVariants}
+                  className="text-center mt-4"
+                >
+                  <p className="mb-0">
+                    Não tem uma conta?{" "}
+                    <Link to="/register" className="text-decoration-none">
+                      Registre-se
+                    </Link>
+                  </p>
+                </motion.div>
+              </Card.Body>
             </Form>
-
-            <div className="text-center">
-              Don't have an account? <Link to="/register">Register</Link>
-            </div>
-          </Card.Body>
-        </Card>
-      </motion.div>
-    </Container>
+          </Card>
+        </Col>
+      </Row>
+    </PageContainer>
   );
 };

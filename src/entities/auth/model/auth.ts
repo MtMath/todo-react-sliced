@@ -1,13 +1,25 @@
 export interface LoginCredentials {
   email: string;
   password: string;
-  rememberMe?: boolean;
 }
 
 export interface RegisterCredentials {
-  name: string;
+  username: string;
   email: string;
   password: string;
-  confirmPassword: string;
 }
 
+export interface AuthResponse {
+  accessToken: string;
+}
+
+export interface PasswordResetRequest {
+  email: string;
+}
+
+export interface TokenPayload {
+  id: string;
+  username: string;
+  iat: number;
+  exp: number;
+}
