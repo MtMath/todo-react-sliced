@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/MtMath/todo-react-sliced/compare/v1.2.2...v1.2.3) (2025-03-22)
+
+
+### Bug Fixes
+
+* **Register:** incorrect form spacing ([debb53e](https://github.com/MtMath/todo-react-sliced/commit/debb53e1029f0e7664889674fe63cb3739acc275))
+
 ## [1.2.2](https://github.com/MtMath/todo-react-sliced/compare/v1.2.1...v1.2.2) (2025-03-22)
 
 
