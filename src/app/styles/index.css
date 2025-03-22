@@ -15,7 +15,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Animações com CSS puro */
 .fade-in {
   animation: fadeIn 0.5s ease-in;
 }

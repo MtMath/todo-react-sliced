@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Modal } from "react-bootstrap";
-import { Task } from "entities/task";
-import { TaskList } from "entities/task-list";
+import { Form, Modal, Alert } from "react-bootstrap";
+import { Task } from "entities/task/model/task";
+import { TaskList } from "entities/task-list/model/taskList";
+import { Button } from "shared/ui";
 
 interface TaskFormProps {
   task?: Task;
   taskLists: TaskList[];
   currentListId?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmit: (taskData: any) => Promise<boolean>;
   onClose: () => void;
   show: boolean;
@@ -23,29 +23,44 @@ export const TaskForm: React.FC<TaskFormProps> = ({
 }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<"pending" | "completed">("pending");
+  const [status, setStatus] = useState<"PENDING" | "COMPLETED">("PENDING");
   const [taskListId, setTaskListId] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (task) {
       setTitle(task.title);
       setDescription(task.description);
       setStatus(task.status);
-      setTaskListId(task.taskListId);
+      setTaskListId(task.taskListId || "");
     } else {
       setTitle("");
       setDescription("");
-      setStatus("pending");
+      setStatus("PENDING");
       setTaskListId(
         currentListId || (taskLists.length > 0 ? taskLists[0].id : "")
       );
     }
+
+    setError(null);
   }, [task, show, currentListId, taskLists]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!title.trim()) {
+      setError("O título é obrigatório");
+      return;
+    }
+
+    if (!taskListId) {
+      setError("Selecione uma lista para a tarefa");
+      return;
+    }
+
     setLoading(true);
+    setError(null);
 
     try {
       const taskData = task
@@ -66,55 +81,70 @@ export const TaskForm: React.FC<TaskFormProps> = ({
 
       if (success) {
         onClose();
+      } else {
+        setError("Não foi possível salvar a tarefa");
       }
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Ocorreu um erro ao salvar a tarefa"
+      );
+      console.error("Error submitting task:", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal show={show} onHide={onClose} centered backdrop="static">
       <Modal.Header closeButton>
-        <Modal.Title>{task ? "Edit Task" : "Create New Task"}</Modal.Title>
+        <Modal.Title>{task ? "Editar Tarefa" : "Nova Tarefa"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {error && (
+          <Alert variant="danger" dismissible onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        )}
+
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
+            <Form.Label>Título</Form.Label>
             <Form.Control
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter task title"
+              placeholder="Digite o título da tarefa"
               required
+              autoFocus
             />
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Description</Form.Label>
+            <Form.Label>Descrição</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter task description"
-              required
+              placeholder="Digite a descrição da tarefa"
             />
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>List</Form.Label>
+            <Form.Label>Lista</Form.Label>
             <Form.Select
               value={taskListId}
               onChange={(e) => setTaskListId(e.target.value)}
               required
             >
               <option value="" disabled>
-                Select a list
+                Selecione uma lista
               </option>
               {taskLists.map((list) => (
                 <option key={list.id} value={list.id}>
-                  {list.title}
+                  {list.name}
                 </option>
               ))}
             </Form.Select>
@@ -126,21 +156,21 @@ export const TaskForm: React.FC<TaskFormProps> = ({
               <Form.Select
                 value={status}
                 onChange={(e) =>
-                  setStatus(e.target.value as "pending" | "completed")
+                  setStatus(e.target.value as "PENDING" | "COMPLETED")
                 }
               >
-                <option value="pending">Pending</option>
-                <option value="completed">Completed</option>
+                <option value="PENDING">Pendente</option>
+                <option value="COMPLETED">Concluída</option>
               </Form.Select>
             </Form.Group>
           )}
 
-          <div className="d-flex justify-content-end gap-2">
-            <Button variant="secondary" onClick={onClose}>
-              Cancel
+          <div className="d-flex justify-content-end gap-2 mt-4">
+            <Button variant="secondary" onClick={onClose} disabled={loading}>
+              Cancelar
             </Button>
             <Button variant="primary" type="submit" disabled={loading}>
-              {loading ? "Saving..." : "Save"}
+              {loading ? "Salvando..." : "Salvar"}
             </Button>
           </div>
         </Form>

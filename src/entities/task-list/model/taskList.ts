@@ -1,18 +1,27 @@
 export interface TaskList {
   id: string;
-  title: string;
+  name: string;
   description?: string;
-  createdAt: Date;
+  color?: string;
+  isDefault: boolean;
+  position: number;
   userId: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export interface CreateTaskListDto {
-  title: string;
+  name: string;
   description?: string;
+  color?: string;
+  isDefault?: boolean;
 }
 
 export interface UpdateTaskListDto {
   id: string;
-  title?: string;
+  name?: string;
   description?: string;
+  color?: string;
+  isDefault?: boolean;
+  position?: number;
 }

@@ -13,7 +13,7 @@ class ApiClient {
 
   constructor() {
     this.baseURL =
-      import.meta.env.VITE_API_URL || "http://localhost:5001/api/v1";
+      import.meta.env.VITE_API_URL || "https://artistic-vision-production.up.railway.app/api/v1";
     this.client = axios.create({
       baseURL: this.baseURL,
       headers: {

@@ -1,32 +1,24 @@
 import React, { createContext, useContext } from "react";
-import { useAuth } from "../model/auth";
-import { LoginCredentials, RegisterCredentials } from "entities/auth";
-import { User } from "entities/user";
+import { useAuth, UseAuthReturn } from "../model/use-auth";
 
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (credentials: LoginCredentials) => Promise<boolean>;
-  register: (credentials: RegisterCredentials) => Promise<boolean>;
-  logout: () => void;
-  isAuthenticated: boolean;
+const AuthContext = createContext<UseAuthReturn | undefined>(undefined);
+
+interface AuthProviderProps {
+  children: React.ReactNode;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const auth = useAuth();
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-// Move this hook later to a separate file or folder like hooks (I don't know where)
-export const useAuthContext = (): AuthContextType => {
+export const useAuthContext = (): UseAuthReturn => {
   const context = useContext(AuthContext);
+
   if (context === undefined) {
-    throw new Error("useAuthContext must be used within an AuthProvider");
+    throw new Error("useAuthContext deve ser usado dentro de um AuthProvider");
   }
+
   return context;
 };

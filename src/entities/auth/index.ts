@@ -1,1 +1,1 @@
-export type { LoginCredentials, RegisterCredentials } from "./model/auth";
+export type { LoginCredentials, RegisterCredentials, AuthResponse } from "./model/auth";
