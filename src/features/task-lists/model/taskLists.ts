@@ -1,96 +1,121 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   TaskList,
   CreateTaskListDto,
   UpdateTaskListDto,
-} from "entities/task-list";
+} from "entities/task-list/model/taskList";
+import { taskListService } from "entities/task-list/api/taskListService";
 
 export const useTaskLists = () => {
   const [taskLists, setTaskLists] = useState<TaskList[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchTaskLists = async () => {
+  const fetchTaskLists = useCallback(async () => {
     try {
       setLoading(true);
-      const mockTaskLists: TaskList[] = [
-        {
-          id: "1",
-          title: "Trabalho",
-          description: "Tarefas relacionadas ao trabalho",
-          createdAt: new Date(),
-          userId: "1",
-        },
-        {
-          id: "2",
-          title: "Pessoal",
-          description: "Tarefas pessoais",
-          createdAt: new Date(Date.now() - 86400000),
-          userId: "1",
-        },
-      ];
-
-      setTaskLists(mockTaskLists);
       setError(null);
+      const listsData = await taskListService.getTaskLists();
+
+      const sortedLists = [...listsData].sort(
+        (a, b) => a.position - b.position
+      );
+      setTaskLists(sortedLists);
     } catch (err) {
-      setError("Failed to load task lists");
+      setError("Falha ao carregar listas de tarefas");
       console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTaskLists();
+  }, [fetchTaskLists]);
+
+  const createTaskList = async (
+    listData: CreateTaskListDto
+  ): Promise<boolean> => {
+    try {
+      setLoading(true);
+      const newList = await taskListService.createTaskList(listData);
+
+      setTaskLists((prevLists) => [...prevLists, newList]);
+      return true;
+    } catch (err) {
+      setError("Falha ao criar lista de tarefas");
+      console.error(err);
+      return false;
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchTaskLists();
-  }, []);
-
-  const createTaskList = async (
-    taskListData: CreateTaskListDto
-  ): Promise<boolean> => {
-    try {
-      const newTaskList: TaskList = {
-        id: Date.now().toString(),
-        ...taskListData,
-        createdAt: new Date(),
-        userId: "1",
-      };
-
-      setTaskLists((prevLists) => [...prevLists, newTaskList]);
-      return true;
-    } catch (err) {
-      setError("Failed to create task list");
-      console.error(err);
-      return false;
-    }
-  };
-
   const updateTaskList = async (
-    taskListData: UpdateTaskListDto
+    listData: UpdateTaskListDto
   ): Promise<boolean> => {
     try {
+      setLoading(true);
+      const updatedList = await taskListService.updateTaskList(listData);
+
       setTaskLists((prevLists) =>
         prevLists.map((list) =>
-          list.id === taskListData.id ? { ...list, ...taskListData } : list
+          list.id === updatedList.id ? updatedList : list
         )
       );
       return true;
     } catch (err) {
-      setError("Failed to update task list");
+      setError("Falha ao atualizar lista de tarefas");
       console.error(err);
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
   const deleteTaskList = async (id: string): Promise<boolean> => {
     try {
+      setLoading(true);
+      await taskListService.deleteTaskList(id);
+
       setTaskLists((prevLists) => prevLists.filter((list) => list.id !== id));
       return true;
     } catch (err) {
-      setError("Failed to delete task list");
+      setError("Falha ao excluir lista de tarefas");
       console.error(err);
       return false;
+    } finally {
+      setLoading(false);
     }
   };
+
+  const setDefaultTaskList = async (id: string): Promise<boolean> => {
+    try {
+      setLoading(true);
+      const updatedList = await taskListService.setDefaultTaskList(id);
+
+      setTaskLists((prevLists) =>
+        prevLists.map((list) => ({
+          ...list,
+          isDefault: list.id === updatedList.id,
+        }))
+      );
+      return true;
+    } catch (err) {
+      setError("Falha ao definir lista padrão");
+      console.error(err);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getDefaultTaskList = useCallback(() => {
+    return (
+      taskLists.find((list) => list.isDefault) ||
+      (taskLists.length > 0 ? taskLists[0] : null)
+    );
+  }, [taskLists]);
 
   return {
     taskLists,
@@ -100,5 +125,7 @@ export const useTaskLists = () => {
     createTaskList,
     updateTaskList,
     deleteTaskList,
+    setDefaultTaskList,
+    getDefaultTaskList,
   };
 };

@@ -1,0 +1,132 @@
+.modern-sidebar {
+  --primary-color: #3498db;
+  --hover-bg: #f8f9fa;
+  --selected-bg: #e9f2ff;
+  --border-radius: 12px;
+  border-radius: var(--border-radius);
+}
+
+.task-list-item-container {
+  margin: 4px 0;
+}
+
+.task-list-item {
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.task-list-item.selected {
+  background-color: var(--selected-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.color-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 12px;
+  transition: transform 0.2s ease;
+}
+
+.task-list-content {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.task-list-title {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-list-item.selected .task-list-title {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.task-list-meta {
+  display: flex;
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.task-pending,
+.task-completed {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.task-pending .badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2em 0.4em;
+}
+
+.task-completed i {
+  font-size: 0.8rem;
+}
+
+.list-actions {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.list-actions.visible {
+  opacity: 1;
+}
+
+.dropdown-toggle-no-caret::after {
+  display: none;
+}
+
+.dropdown-toggle-no-caret {
+  color: #6c757d;
+  background: transparent !important;
+  border: none;
+  padding: 4px;
+  box-shadow: none !important;
+}
+
+.dropdown-toggle-no-caret:hover {
+  color: #212529;
+}
+
+.dropdown-menu {
+  border-radius: 8px;
+  padding: 8px 0;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
+
+.task-list-item:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+}
+
+.overflow-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-auto::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 4px;
+}
+
+.overflow-auto::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}

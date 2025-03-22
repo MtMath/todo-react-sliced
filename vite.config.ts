@@ -15,6 +15,9 @@ export default defineConfig({
       shared: path.resolve(__dirname, "./src/shared"),
     },
   },
+  server: {
+    allowedHosts: [".ngrok-free.app"],
+  },
   build: {
     outDir: "dist",
     sourcemap: true,
