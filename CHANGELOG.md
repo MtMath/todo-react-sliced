@@ -1,3 +1,13 @@
+# [1.2.0](https://github.com/MtMath/todo-react-sliced/compare/v1.1.0...v1.2.0) (2025-03-22)
+
+
+### Features
+
+* Add api client ([870dbf0](https://github.com/MtMath/todo-react-sliced/commit/870dbf0c65e62a93a2a77b03011f12165e3546e4))
+* Add date utils ([c474d2d](https://github.com/MtMath/todo-react-sliced/commit/c474d2dcb73c57ae37e4cfcc3b86b00cb3d2f92b))
+* Common Components ([8c09351](https://github.com/MtMath/todo-react-sliced/commit/8c093518b8e9a006147e62356bd571be203e0538))
+* improve components styles ([779a8f6](https://github.com/MtMath/todo-react-sliced/commit/779a8f682834c81fe230d3d1bdbbd8e78e4cf479))
+
 # [1.1.0](https://github.com/MtMath/todo-react-sliced/compare/v1.0.0...v1.1.0) (2025-03-19)
 
 
