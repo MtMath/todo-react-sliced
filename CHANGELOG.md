@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/MtMath/todo-react-sliced/compare/v1.2.0...v1.2.1) (2025-03-22)
+
+
+### Bug Fixes
+
+* **ci:** Allow backenc connection in nginx ([08faafe](https://github.com/MtMath/todo-react-sliced/commit/08faafec8ea5b655fcb0f884b16b3d8335d51687))
+
 # [1.2.0](https://github.com/MtMath/todo-react-sliced/compare/v1.1.0...v1.2.0) (2025-03-22)
 
 
